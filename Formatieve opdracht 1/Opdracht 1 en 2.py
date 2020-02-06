@@ -40,18 +40,7 @@ def tekstCheck():
         # print(str1[ind])
     print("{} in string 1, {} in string 2, op character {} is het verschil".format(str1[ind], str2[ind], ind+1))
 
-# Opdracht 3
-def count(list):
-    numberdict = {}
-    for number in list:
-        if number in numberdict:
-            numberdict[number] += 1
-        else:
-            numberdict[number] = 1
-    print(numberdict)
-
 # tekenForPyramid()
 # tekenWhilePyramid()
 # tekstCheck()
 # test
-count([1, 1, 2, 2, 2, 3, 4, 5, 5, 5, 6])
