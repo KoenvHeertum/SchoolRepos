@@ -4,14 +4,14 @@ def tekenForPyramid():
 
     for line in range(0, maxlen):
         for ster in range(0, line+1):
-            print("* ", end="")
+            print("*", end=" ")
         print("\r")
     tekenForPyramidR(maxlen-1)
 
 def tekenForPyramidR(maxlen):
     for line in reversed(range(0, maxlen)):
         for ster in reversed(range(0, line+1)):
-            print("* ", end="")
+            print("*", end=" ")
         print("\r")
 
 
@@ -40,7 +40,6 @@ def tekstCheck():
         # print(str1[ind])
     print("{} in string 1, {} in string 2, op character {} is het verschil".format(str1[ind], str2[ind], ind+1))
 
-# tekenForPyramid()
-# tekenWhilePyramid()
-# tekstCheck()
-# test
+tekenForPyramid()
+tekenWhilePyramid()
+tekstCheck()
