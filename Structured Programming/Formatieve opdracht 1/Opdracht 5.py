@@ -6,4 +6,4 @@ def numberSorter(numberList):
         newList.append(min(oldList))
         oldList.remove(min(oldList))
 
-numberSorter([1,6,2,3,6,64,3,2,5,34,23,63,28])
+print(numberSorter([1,6,2,3,6,64,3,2,5,34,23,63,28]))
