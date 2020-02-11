@@ -1,3 +1,5 @@
+"""Zwart is goede plek, wit is niet op goede plek"""
+
 def intro():
     # print("Hallo, welkom bij Mastermind. Je speelt tegen een computer.\n "
     #       "Wil je de code raden? Typ 'Raden' in.\n Wil je dat de computer je code raadt? Typ 'Feedback' in.\n")
