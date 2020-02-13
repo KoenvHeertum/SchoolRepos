@@ -1,13 +1,16 @@
+import random
 from termcolor import colored
 
 """Zwart is goede plek, wit is niet op goede plek"""
 colorkey = [] # Dit is de code die geraden moet worden
-kleurenDict = {"ROOD": "R", "GREEN": "G", "BLUE": "B", "YELLOW": "Y", "WHITE": "W", "MAGENTA": "M"}
+kleurenList = ["r", "g", "b", "y", "w", "p"] # dit is een lijst met alle kleuren
 # print(colored('O ', 'red'), colored('O ', 'green'), colored('O ', 'yellow'), colored('O ', 'blue'), colored('O ', 'white'), colored('O ', 'magenta'))
 
 def intro():
+    print("-" * 80)
     gamemode = input("Hallo, welkom bij Mastermind. Je speelt tegen een computer.\n "
           "#1. Wil je de code raden? Typ 'Raden' in.\n #2. Wil je dat de computer je code raadt? Typ 'Feedback' in.\n")
+    print("-" * 80)
     gamemode = ''.join(gamemode.split())
     if gamemode.lower() == "raden" or gamemode.lower() == "1":
         print("raden it is")
@@ -17,14 +20,17 @@ def intro():
         print("Dat is geen goede input. Probeer opnieuw.")
         intro()
 
-def feedbackInput():
+def createColorkey():
+    """Je vult de colorkey in, aan de hand van 4 vragen. Na afloop krijg je de vraag of je akkoord gaat met je code."""
     code = []
-    print("De beschikbare kleuren zijn {}, {}, {}, {}, {} en {}.\n".format(colored("Rood", "red"),
+    print("-" * 80)
+    print("De beschikbare kleuren zijn {}, {}, {}, {}, {} en {}.".format(colored("Rood", "red"),
           colored("Groen", "green"),
           colored("Blauw", "blue"),
           colored("Geel", "yellow"),
           colored("Wit", "white"),
           colored("Paars", "magenta")))
+    print("-" * 80)
     for i in range(1,5):
         color = input("Voer hier kleur {} in: \n".format(i))
         color = ''.join(color.split())
@@ -44,22 +50,57 @@ def feedbackInput():
             print("Kleur kon niet gelezen worden. Probeer opnieuw")
             code.clear()
             break
+    print("-" * 80)
     if len(code) != 4:
-        feedbackInput()
+        print("Failswitch: Code bestaat NIET uit 4 chars.")
+        createColorkey()
     else:
         tempkey = code
 
-        confirmation = input("\nJe huidige code is:\n{}\nIs dit ok?\n".format(printColorkeyString(tempkey)))
+        confirmation = input("Je huidige code is:\n{}\nIs dit ok?\n".format(printColorkeyString(tempkey)))
         confirmation = ''.join(confirmation.split())
-        if confirmation.lower() == "yes" or confirmation.lower() == "ja" or confirmation.lower() == "j" or confirmation.lower() == "y":
+        if confirmation.lower() == "yes" or confirmation.lower() == "ja" or confirmation.lower() == "j" \
+                or confirmation.lower() == "y" or confirmation.lower() == "ok":
             global colorkey
             colorkey = tempkey
         else:
             print("Probeer het opnieuw.")
-            feedbackInput()
+            createColorkey()
         return
 
+def generateColorkey():
+    """Computer genereert colorkey"""
+    global colorkey
+    for i in range(1, 5):
+        colorkey.append(random.choice(kleurenList))
+
+def generateFeedback(kleurstring):
+    """Computer geeft feedback op jouw opgeleverde codecombo"""
+    global colorkey
+    tempcolorkey = colorkey.copy()
+    zwart = 0
+    wit = 0
+    for i in range(0, len(kleurstring)):
+        if kleurstring[i] in tempcolorkey:
+            if kleurstring[i] == tempcolorkey[i]:
+                # print("Value {} is op de juiste plek".format(i))
+                tempcolorkey[i] = "z-pin"
+                zwart += 1
+            else:
+                # print("Value {} staat in de lijst, niet op juiste plek".format(i))
+                tempcolorkey[(tempcolorkey.index(kleurstring[i]))] = "w-pin"
+                wit += 1
+    print("-" * 80)
+    print("Feedback: {} zwarte pinnen, {} witte pinnen.".format(zwart, wit))
+    print("-" * 80)
+    if zwart == len(tempcolorkey):
+        print("Gefeliciteerd, je hebt de code gekraakt!")
+        print("-" * 80)
+
+
+
 def printColorkeyString(kleurstring):
+    """Zet een list om in een rij pinnen (in kleur)"""
     string = ""
     for i in kleurstring:
         if i == "r":
@@ -81,5 +122,8 @@ def printColorkeyString(kleurstring):
 
 
 intro()
-feedbackInput()
+createColorkey()
+# generateColorkey()
+generateFeedback(["r", "g", "b", "r"])
+# print(printColorkeyString(colorkey))
 print("Colorkey is {}".format(colorkey))
