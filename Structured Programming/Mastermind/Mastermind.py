@@ -1,4 +1,5 @@
 import random
+from itertools import *
 from termcolor import colored
 
 """Zwart is goede plek, wit is niet op goede plek"""
@@ -13,9 +14,9 @@ def intro():
     print("-" * 80)
     gamemode = ''.join(gamemode.split())
     if gamemode.lower() == "raden" or gamemode.lower() == "1":
-        print("raden it is")
+        radenGameloop()
     elif gamemode.lower() == "feedback" or gamemode.lower() == "2":
-        print("feedback it is")
+        feedbackGameloop()
     else:
         print("Dat is geen goede input. Probeer opnieuw.")
         intro()
@@ -23,7 +24,7 @@ def intro():
 def createColorkey():
     """Je vult de colorkey in, aan de hand van 4 vragen. Na afloop krijg je de vraag of je akkoord gaat met je code."""
     code = []
-    print("-" * 80)
+    # print("-" * 80)
     print("De beschikbare kleuren zijn {}, {}, {}, {}, {} en {}.".format(colored("Rood", "red"),
           colored("Groen", "green"),
           colored("Blauw", "blue"),
@@ -61,23 +62,28 @@ def createColorkey():
         confirmation = ''.join(confirmation.split())
         if confirmation.lower() == "yes" or confirmation.lower() == "ja" or confirmation.lower() == "j" \
                 or confirmation.lower() == "y" or confirmation.lower() == "ok":
-            global colorkey
-            colorkey = tempkey
+            return tempkey
         else:
             print("Probeer het opnieuw.")
             createColorkey()
-        return
+        # return
 
-def generateColorkey():
-    """Computer genereert colorkey"""
-    global colorkey
+
+def createCombinationList():
+    print("hoi")
+    # combinations = combinations_with_replacement(["r", "g", "b", "y", "w", "p"], 4)
+
+
+def generateColorstring():
+    """Computer genereert colorstring en returned target"""
+    string = []
     for i in range(1, 5):
-        colorkey.append(random.choice(kleurenList))
+        string.append(random.choice(kleurenList))
+    return string
 
-def generateFeedback(kleurstring):
-    """Computer geeft feedback op jouw opgeleverde codecombo"""
-    global colorkey
-    tempcolorkey = colorkey.copy()
+def generateFeedback(kleurstring, key):
+    """Computer geeft feedback op de opgeleverde codecombo, vergelijkt met 2e combo. Return is ZWART, WIT"""
+    tempcolorkey = key.copy()
     zwart = 0
     wit = 0
     for i in range(0, len(kleurstring)):
@@ -90,14 +96,15 @@ def generateFeedback(kleurstring):
                 # print("Value {} staat in de lijst, niet op juiste plek".format(i))
                 tempcolorkey[(tempcolorkey.index(kleurstring[i]))] = "w-pin"
                 wit += 1
+    return zwart, wit
+
+
+def printFeedback(zwart, wit):
     print("-" * 80)
     print("Feedback: {} zwarte pinnen, {} witte pinnen.".format(zwart, wit))
-    print("-" * 80)
-    if zwart == len(tempcolorkey):
+    if zwart == 4:
         print("Gefeliciteerd, je hebt de code gekraakt!")
-        print("-" * 80)
-
-
+    print("-" * 80)
 
 def printColorkeyString(kleurstring):
     """Zet een list om in een rij pinnen (in kleur)"""
@@ -117,13 +124,56 @@ def printColorkeyString(kleurstring):
             string += (colored('O ', 'magenta'))
         else:
             print("ERROR: colorkey bestaat niet uit 4 juiste kleuren.")
-    # print(string)
     return string
 
+def radenGameloop():
+    """Gameloop als JIJ de code wilt raden"""
+    global colorkey
+    colorkey = generateColorstring()
+    print("Colorkey gemaakt.")
+    # print(colorkey)
+    beurten = 8
+    for i in range(1, beurten+1):
+        print("Turn #{} (van {})".format(i, beurten))
+        laatsteZet = createColorkey()
+        zwart, wit = generateFeedback(laatsteZet, colorkey)
+        printFeedback(zwart, wit)
+        if zwart == 4:
+            break
+    print("De code was: {}".format(printColorkeyString(colorkey)))
+
+
+def feedbackGameloop():
+    """Gameloop als de computer jouw code moet raden"""
+    global colorkey
+    colorkey = createColorkey()
+    allCombinations = combinations_with_replacement(["r", "g", "b", "y", "w", "p"], 4)
+    latestTurnCombo = generateColorstring()
+    # print("{} colorkey".format(colorkey))
+    print(allCombinations)
+    beurten = 8
+    print("-" * 80)
+    for i in range(1, beurten+1):
+        print("Turn #{} (van {})".format(i, beurten))
+        print("-" * 80)
+        print(printColorkeyString(latestTurnCombo))
+        zwart, wit = generateFeedback(latestTurnCombo, colorkey)
+        printFeedback(zwart, wit)
+        for i in allCombinations:
+            zwartCombo, witCombo = generateFeedback(i, latestTurnCombo)
+            if zwartCombo != zwart or witCombo != wit:
+                combinations.remove(latestTurnCombo)
+            else:
+                print(allCombinations[i])
+    print("De code was: {}".format(printColorkeyString(colorkey)))
+
+
+    # print(printColorkeyString(latestTurnCombo))
+    # generateFeedback(latestTurnCombo, colorkey)
 
 intro()
-createColorkey()
+# createColorkey(colorkey)
 # generateColorkey()
-generateFeedback(["r", "g", "b", "r"])
+# generateFeedback(["r", "g", "b", "r"])
 # print(printColorkeyString(colorkey))
-print("Colorkey is {}".format(colorkey))
+# print("Colorkey was {}".format(colorkey))
