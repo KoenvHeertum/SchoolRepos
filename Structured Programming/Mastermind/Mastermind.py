@@ -24,7 +24,6 @@ def intro():
 def createColorkey():
     """Je vult de colorkey in, aan de hand van 4 vragen. Na afloop krijg je de vraag of je akkoord gaat met je code."""
     code = []
-    # print("-" * 80)
     print("De beschikbare kleuren zijn {}, {}, {}, {}, {} en {}.".format(colored("Rood", "red"),
           colored("Groen", "green"),
           colored("Blauw", "blue"),
@@ -66,12 +65,20 @@ def createColorkey():
         else:
             print("Probeer het opnieuw.")
             createColorkey()
-        # return
 
 
 def createCombinationList():
-    print("hoi")
-    # combinations = combinations_with_replacement(["r", "g", "b", "y", "w", "p"], 4)
+    cList = kleurenList.copy()
+    cList2 = cList.copy()
+    cList3 = cList.copy()
+    cList4 = cList.copy()
+    allCombinations = []
+    for i in cList:
+        for j in cList2:
+            for k in cList3:
+                for l in cList4:
+                    allCombinations.append([i, j, k, l])
+    return allCombinations
 
 
 def generateColorstring():
@@ -131,7 +138,6 @@ def radenGameloop():
     global colorkey
     colorkey = generateColorstring()
     print("Colorkey gemaakt.")
-    # print(colorkey)
     beurten = 8
     for i in range(1, beurten+1):
         print("Turn #{} (van {})".format(i, beurten))
@@ -147,16 +153,7 @@ def feedbackGameloop():
     """Gameloop als de computer jouw code moet raden"""
     global colorkey
     colorkey = createColorkey()
-    cList = kleurenList.copy()
-    cList2 = cList.copy()
-    cList3 = cList.copy()
-    cList4 = cList.copy()
-    allCombinations = []
-    for i in cList:
-        for j in cList2:
-            for k in cList3:
-                for l in cList4:
-                    allCombinations.append([i, j, k, l])
+    allCombinations = createCombinationList()
     print("allcombo lengte: {}".format(len(allCombinations)))
     latestTurnCombo = generateColorstring()
     beurten = 8
@@ -170,17 +167,14 @@ def feedbackGameloop():
         if zwart == 4:
             print("CPU heeft de code geraden.")
             break
-        for i in allCombinations:
-            zwartCombo, witCombo = generateFeedback(i, latestTurnCombo)
+        for j in allCombinations:
+            zwartCombo, witCombo = generateFeedback(j, latestTurnCombo)
             # print(zwart, zwartCombo, wit, witCombo)
             if zwartCombo != zwart or witCombo != wit:
-                allCombinations.remove(i)
-            # else:
-                # print("nope {}".format(i))
-        # print(allCombinations)
+                allCombinations.remove(j)
         # newIndex = allCombinations.index(random.choice(allCombinations))
-        # latestTurnCombo = allCombinations[allCombinations.index(random.choice(allCombinations))]
-        # print(latestTurnCombo)
+        latestTurnCombo = allCombinations[allCombinations.index(random.choice(allCombinations))]
+        print(latestTurnCombo)
         print("allcombo lengte: {}".format(len(allCombinations)))
         input("hier input niet doen")
 
