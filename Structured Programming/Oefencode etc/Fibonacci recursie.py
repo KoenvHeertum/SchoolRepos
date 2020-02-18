@@ -36,7 +36,7 @@ def combo3():
     allCombinations = list(combinations_with_replacement(["r", "g", "b", "y", "w", "p", "r", "g", "b", "y", "w", "p", "r", "g", "b", "y", "w", "p", "r", "g", "b", "y", "w", "p"], 4))
     counter = 0
     for i in allCombinations:
-        print(i)
+        print(list(i))
         counter += 1
         print(counter)
 

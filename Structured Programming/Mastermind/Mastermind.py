@@ -147,24 +147,45 @@ def feedbackGameloop():
     """Gameloop als de computer jouw code moet raden"""
     global colorkey
     colorkey = createColorkey()
-    allCombinations = combinations_with_replacement(["r", "g", "b", "y", "w", "p"], 4)
+    cList = kleurenList.copy()
+    cList2 = kleurenList.copy()
+    cList3 = kleurenList.copy()
+    cList4 = kleurenList.copy()
+    allCombinations = []
+    for i in cList:
+        for j in cList2:
+            for k in cList3:
+                for l in cList4:
+                    allCombinations.append([i, j, k, l])
+    print("allcombo lengte: {}".format(len(allCombinations)))
+    # tupleCombinations = combinations_with_replacement(["r", "g", "b", "y", "w", "p", "r", "g", "b", "y", "w", "p", "r", "g", "b", "y", "w", "p", "r", "g", "b", "y", "w", "p"], 4)
+    allCombinations = []
     latestTurnCombo = generateColorstring()
-    # print("{} colorkey".format(colorkey))
-    print(allCombinations)
     beurten = 8
     print("-" * 80)
     for i in range(1, beurten+1):
         print("Turn #{} (van {})".format(i, beurten))
         print("-" * 80)
         print(printColorkeyString(latestTurnCombo))
+        print(len(allCombinations))
         zwart, wit = generateFeedback(latestTurnCombo, colorkey)
         printFeedback(zwart, wit)
+        if zwart == 4:
+            print("CPU heeft de code geraden.")
+            break
         for i in allCombinations:
             zwartCombo, witCombo = generateFeedback(i, latestTurnCombo)
+            # print(zwart, zwartCombo, wit, witCombo)
             if zwartCombo != zwart or witCombo != wit:
-                combinations.remove(latestTurnCombo)
-            else:
-                print(allCombinations[i])
+                allCombinations.remove(i)
+            # else:
+                # print("nope {}".format(i))
+        # print(allCombinations)
+        # newIndex = allCombinations.index(random.choice(allCombinations))
+        # latestTurnCombo = allCombinations[allCombinations.index(random.choice(allCombinations))]
+        # print(latestTurnCombo)
+        input("hier input niet doen")
+
     print("De code was: {}".format(printColorkeyString(colorkey)))
 
 
