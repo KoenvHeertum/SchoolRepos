@@ -148,9 +148,9 @@ def feedbackGameloop():
     global colorkey
     colorkey = createColorkey()
     cList = kleurenList.copy()
-    cList2 = kleurenList.copy()
-    cList3 = kleurenList.copy()
-    cList4 = kleurenList.copy()
+    cList2 = cList.copy()
+    cList3 = cList.copy()
+    cList4 = cList.copy()
     allCombinations = []
     for i in cList:
         for j in cList2:
@@ -158,8 +158,6 @@ def feedbackGameloop():
                 for l in cList4:
                     allCombinations.append([i, j, k, l])
     print("allcombo lengte: {}".format(len(allCombinations)))
-    # tupleCombinations = combinations_with_replacement(["r", "g", "b", "y", "w", "p", "r", "g", "b", "y", "w", "p", "r", "g", "b", "y", "w", "p", "r", "g", "b", "y", "w", "p"], 4)
-    allCombinations = []
     latestTurnCombo = generateColorstring()
     beurten = 8
     print("-" * 80)
@@ -167,7 +165,6 @@ def feedbackGameloop():
         print("Turn #{} (van {})".format(i, beurten))
         print("-" * 80)
         print(printColorkeyString(latestTurnCombo))
-        print(len(allCombinations))
         zwart, wit = generateFeedback(latestTurnCombo, colorkey)
         printFeedback(zwart, wit)
         if zwart == 4:
@@ -184,6 +181,7 @@ def feedbackGameloop():
         # newIndex = allCombinations.index(random.choice(allCombinations))
         # latestTurnCombo = allCombinations[allCombinations.index(random.choice(allCombinations))]
         # print(latestTurnCombo)
+        print("allcombo lengte: {}".format(len(allCombinations)))
         input("hier input niet doen")
 
     print("De code was: {}".format(printColorkeyString(colorkey)))
