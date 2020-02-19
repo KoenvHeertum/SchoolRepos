@@ -68,6 +68,7 @@ def createColorkey():
 
 
 def createCombinationList():
+    """Maakt alle 1296 mogelijke combo's aan"""
     cList = kleurenList.copy()
     cList2 = cList.copy()
     cList3 = cList.copy()
@@ -108,6 +109,7 @@ def generateFeedback(kleurstring, key):
     return zwart, wit
 
 def generateFirstTurn():
+    """Genereert de eerste turn, dat een volgorde van AABB volgt"""
     colorString = []
     while True:
         for i in range(0, 4):
@@ -124,6 +126,7 @@ def generateFirstTurn():
 
 # Source voor korte versie: https://www.w3schools.com/python/python_howto_remove_duplicates.asp
 def kleurenInCombo(combo):
+    """Returned lijst met de kleuren van een gok, zonder duplicates"""
     kleuren = list(dict.fromkeys(combo))
     return kleuren
 
@@ -159,7 +162,7 @@ def radenGameloop():
     """Gameloop als JIJ de code wilt raden"""
     global colorkey
     colorkey = generateColorstring()
-    beurten = 8
+    beurten = 10
     for i in range(1, beurten+1):
         print("Turn #{} (van {})".format(i, beurten))
         laatsteZet = createColorkey()
@@ -172,14 +175,14 @@ def radenGameloop():
 
 def feedbackGameloop():
     """Gameloop als de computer jouw code moet raden"""
-    """Deze code is een beetje een chaos, maar heb expres niet teveel functies aangemaakt omdat 
+    """Deze code is een beetje een chaos, maar heb expres niet te veel functies aangemaakt omdat 
         je anders heel veel moet doorgeven bij elke functie"""
     global colorkey
     colorkey = createColorkey()
     allCombinations = createCombinationList()
     # latestTurnCombo = generateColorstring()
     latestTurnCombo = generateFirstTurn()
-    beurten = 28
+    beurten = 10
     print("-" * 80)
     for i in range(1, beurten+1):
         print("\n\n" + "-" * 80)
@@ -192,18 +195,18 @@ def feedbackGameloop():
         if zwart == 0 and wit == 0:
             kleuren = kleurenInCombo(latestTurnCombo)
             for kleur in kleuren:
-                for allItems in allCombinations:
-                    if kleur in allItems:
-                        allCombinations.remove(allItems)
+                for aItems in allCombinations:    #1296
+                    if kleur in aItems:
+                        allCombinations.remove(aItems)
         if zwart == 4:
             print("CPU heeft de code geraden.")
             break
         for j in allCombinations:
-            zwartCombo, witCombo = generateFeedback(latestTurnCombo, j)
+            zwartCombo, witCombo = generateFeedback(j, latestTurnCombo)
             if zwartCombo != zwart or witCombo != wit:
                 allCombinations.remove(j)
         latestTurnCombo = allCombinations[allCombinations.index(random.choice(allCombinations))]
-        # input("hier input niet doen")
+        # input("hier input voor als je turn voor turn wilt doen.")
 
     print("De code was: {}".format(printColorkeyString(colorkey)))
 

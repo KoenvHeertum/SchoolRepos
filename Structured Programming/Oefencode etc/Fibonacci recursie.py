@@ -2,12 +2,14 @@ import itertools
 import random
 from itertools import *
 
-kleurenList = ["r", "g", "b", "y", "w", "p"] # dit is een lijst met alle kleuren
+kleurenList = ["r", "g", "b", "y", "w", "p"]  # dit is een lijst met alle kleuren
+
 
 def fibr(n):
     if n < 2:
         return 1
-    return fibr(n-1) + fibr(n-2)
+    return fibr(n - 1) + fibr(n - 2)
+
 
 def combo():
     comb = combinations_with_replacement([1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6], 4)
@@ -16,11 +18,13 @@ def combo():
         print(i)
         counter += 1
         print(counter)
+
+
 #     1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6
 
 def combo2():
     algstr = []
-    list = [1,2,3]
+    list = [1, 2, 3]
     list2 = list.copy()
     list3 = list.copy()
     for i in list:
@@ -34,13 +38,17 @@ def combo2():
             algstr.pop(-2)
         algstr.pop(-3)
 
+
 def combo3():
-    allCombinations = list(combinations_with_replacement(["r", "g", "b", "y", "w", "p", "r", "g", "b", "y", "w", "p", "r", "g", "b", "y", "w", "p", "r", "g", "b", "y", "w", "p"], 4))
+    allCombinations = list(combinations_with_replacement(
+        ["r", "g", "b", "y", "w", "p", "r", "g", "b", "y", "w", "p", "r", "g", "b", "y", "w", "p", "r", "g", "b", "y",
+         "w", "p"], 4))
     counter = 0
     for i in allCombinations:
         print(list(i))
         counter += 1
         print(counter)
+
 
 def generateFirstTurn():
     colorString = []
@@ -62,10 +70,11 @@ def kleurenInCombo(combo):
     kleuren = list(dict.fromkeys(combo))
     return kleuren
 
+
 def generateFeedback(kleurstring, key):
     """Computer geeft feedback op de opgeleverde codecombo, vergelijkt met 2e combo. Return is ZWART, WIT"""
-    tempkleurstring = kleurstring.copy()    # 4x red
-    tempcolorkey = key.copy()               # b y y r
+    tempkleurstring = kleurstring.copy()  # 4x red
+    tempcolorkey = key.copy()  # b y y r
     zwart = 0
     wit = 0
     print(tempkleurstring)
@@ -94,8 +103,8 @@ def generateFeedback(kleurstring, key):
 
 def generateFeedback2(kleurstring, key):
     """Computer geeft feedback op de opgeleverde codecombo, vergelijkt met 2e combo. Return is ZWART, WIT"""
-    tempkleurstring = kleurstring.copy()    # 4x red
-    tempcolorkey = key.copy()               # b y y r
+    tempkleurstring = kleurstring.copy()  # 4x red
+    tempcolorkey = key.copy()  # b y y r
     zwart = 0
     wit = 0
     for i in range(0, len(tempkleurstring)):
@@ -111,8 +120,24 @@ def generateFeedback2(kleurstring, key):
             wit += 1
     return zwart, wit
 
+
+def checkVoorKleur():
+    een = [[1,"e",3], [5,6,7,8], [5,1,7,8], [5,"e",7,8], [5,6,1,8], ]
+    for i in een:
+        if "e" in i:
+            een.remove(i)
+    print(een)
+
 # fibr(9)
 # combo3()
 # print(generateFirstTurn())
 # print(kleurenInCombo(["r", "g", "r", "b"]))
-print(generateFeedback2(["r", "p", "b", "r"], ["b", "y", "p", "r"]))
+zwart, wit = generateFeedback2(['b', 'r', 'p', 'w'], ['r', 'r', 'b', 'b'])
+zwartC, witC = generateFeedback2(['r', 'p', 'p', 'w'], ['b', 'r', 'p', 'w'])
+print(zwart, wit)
+print(zwartC, witC)
+if zwartC != zwart or witC != wit:
+    print("hoi")
+print(generateFeedback2(['b', 'r', 'p', 'w'], ['r', 'r', 'b', 'b']))    #gok
+print(generateFeedback2(['r', 'p', 'p', 'p'], ['b', 'r', 'p', 'w']))
+checkVoorKleur()
