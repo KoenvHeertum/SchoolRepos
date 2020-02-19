@@ -1,6 +1,6 @@
 import random
-from itertools import *
 from termcolor import colored
+""""termcolor gebaseerd op https://stackoverflow.com/questions/287871/how-to-print-colored-text-in-terminal-in-python"""
 
 """Zwart is goede plek, wit is niet op goede plek"""
 colorkey = [] # Dit is de code die geraden moet worden
@@ -103,6 +103,7 @@ def generateFeedback(kleurstring, key):
                 # print("Value {} staat in de lijst, niet op juiste plek".format(i))
                 tempcolorkey[(tempcolorkey.index(kleurstring[i]))] = "w-pin"
                 wit += 1
+    # print(tempcolorkey)
     return zwart, wit
 
 
@@ -154,29 +155,29 @@ def feedbackGameloop():
     global colorkey
     colorkey = createColorkey()
     allCombinations = createCombinationList()
-    print("allcombo lengte: {}".format(len(allCombinations)))
+    # print("allcombo lengte: {}".format(len(allCombinations)))
     latestTurnCombo = generateColorstring()
-    beurten = 8
+    beurten = 28
     print("-" * 80)
     for i in range(1, beurten+1):
+        print("\n\n" + "-" * 80)
+        # print("-" * 80)
         print("Turn #{} (van {})".format(i, beurten))
         print("-" * 80)
-        print(printColorkeyString(latestTurnCombo))
+        print("Computer's gok: \n{}".format(printColorkeyString(latestTurnCombo)))
+        # print(printColorkeyString(latestTurnCombo))
         zwart, wit = generateFeedback(latestTurnCombo, colorkey)
         printFeedback(zwart, wit)
         if zwart == 4:
             print("CPU heeft de code geraden.")
             break
         for j in allCombinations:
-            zwartCombo, witCombo = generateFeedback(j, latestTurnCombo)
-            # print(zwart, zwartCombo, wit, witCombo)
+            zwartCombo, witCombo = generateFeedback(latestTurnCombo, j)
             if zwartCombo != zwart or witCombo != wit:
                 allCombinations.remove(j)
-        # newIndex = allCombinations.index(random.choice(allCombinations))
         latestTurnCombo = allCombinations[allCombinations.index(random.choice(allCombinations))]
-        print(latestTurnCombo)
-        print("allcombo lengte: {}".format(len(allCombinations)))
-        input("hier input niet doen")
+        # print("allcombo lengte: {}".format(len(allCombinations)))
+        # input("hier input niet doen")
 
     print("De code was: {}".format(printColorkeyString(colorkey)))
 

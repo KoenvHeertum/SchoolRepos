@@ -40,5 +40,24 @@ def combo3():
         counter += 1
         print(counter)
 
+def generateFeedback(kleurstring, key):
+    """Computer geeft feedback op de opgeleverde codecombo, vergelijkt met 2e combo. Return is ZWART, WIT"""
+    tempcolorkey = key.copy()
+    zwart = 0
+    wit = 0
+    for i in range(0, len(kleurstring)):
+        if kleurstring[i] in tempcolorkey:
+            if kleurstring[i] == tempcolorkey[i]:
+                # print("Value {} is op de juiste plek".format(i))
+                tempcolorkey[i] = "z-pin"
+                zwart += 1
+            else:
+                # print("Value {} staat in de lijst, niet op juiste plek".format(i))
+                tempcolorkey[(tempcolorkey.index(kleurstring[i]))] = "w-pin"
+                wit += 1
+    print(tempcolorkey)
+    return zwart, wit
+
 # fibr(9)
-combo3()
+# combo3()
+print(generateFeedback(['w', 'r', 'g', 'r'], ['r', 'r', 'r', 'r']))
