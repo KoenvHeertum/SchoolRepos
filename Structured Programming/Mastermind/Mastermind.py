@@ -90,21 +90,42 @@ def generateColorstring():
 
 def generateFeedback(kleurstring, key):
     """Computer geeft feedback op de opgeleverde codecombo, vergelijkt met 2e combo. Return is ZWART, WIT"""
-    tempcolorkey = key.copy()
+    tempkleurstring = kleurstring.copy()    # 4x red
+    tempcolorkey = key.copy()               # b y y r
     zwart = 0
     wit = 0
-    for i in range(0, len(kleurstring)):
-        if kleurstring[i] in tempcolorkey:
-            if kleurstring[i] == tempcolorkey[i]:
-                # print("Value {} is op de juiste plek".format(i))
-                tempcolorkey[i] = "z-pin"
-                zwart += 1
-            else:
-                # print("Value {} staat in de lijst, niet op juiste plek".format(i))
-                tempcolorkey[(tempcolorkey.index(kleurstring[i]))] = "w-pin"
-                wit += 1
-    # print(tempcolorkey)
+    for i in range(0, len(tempkleurstring)):
+        if tempkleurstring[i] == tempcolorkey[i]:
+            # print("Value {} is op de juiste plek".format(i))
+            tempcolorkey[i] = "z-pin ck"
+            tempkleurstring[i] = "z-pin ks"
+            zwart += 1
+    for i in range(0, len(tempkleurstring)):
+        if tempkleurstring[i] in tempcolorkey:
+            tempcolorkey[(tempcolorkey.index(tempkleurstring[i]))] = "w-pin"
+            tempkleurstring[i] = "w-pin"
+            wit += 1
     return zwart, wit
+
+def generateFirstTurn():
+    colorString = []
+    while True:
+        for i in range(0, 4):
+            colorString.append(random.choice(kleurenList))
+        if colorString[0] == colorString[1] and colorString[2] == colorString[3] and colorString[0] != colorString[2]:
+            break
+        elif colorString[0] == colorString[2] and colorString[1] == colorString[3] and colorString[0] != colorString[1]:
+            break
+        elif colorString[0] == colorString[3] and colorString[1] == colorString[2] and colorString[0] != colorString[1]:
+            break
+        else:
+            colorString.clear()
+    return colorString
+
+# Source voor korte versie: https://www.w3schools.com/python/python_howto_remove_duplicates.asp
+def kleurenInCombo(combo):
+    kleuren = list(dict.fromkeys(combo))
+    return kleuren
 
 
 def printFeedback(zwart, wit):
@@ -138,7 +159,6 @@ def radenGameloop():
     """Gameloop als JIJ de code wilt raden"""
     global colorkey
     colorkey = generateColorstring()
-    print("Colorkey gemaakt.")
     beurten = 8
     for i in range(1, beurten+1):
         print("Turn #{} (van {})".format(i, beurten))
@@ -152,20 +172,29 @@ def radenGameloop():
 
 def feedbackGameloop():
     """Gameloop als de computer jouw code moet raden"""
+    """Deze code is een beetje een chaos, maar heb expres niet teveel functies aangemaakt omdat 
+        je anders heel veel moet doorgeven bij elke functie"""
     global colorkey
     colorkey = createColorkey()
     allCombinations = createCombinationList()
-    # print("allcombo lengte: {}".format(len(allCombinations)))
-    latestTurnCombo = generateColorstring()
+    # latestTurnCombo = generateColorstring()
+    latestTurnCombo = generateFirstTurn()
     beurten = 28
     print("-" * 80)
     for i in range(1, beurten+1):
         print("\n\n" + "-" * 80)
         print("Turn #{} (van {})".format(i, beurten))
+        print("allcombo lengte: {}".format(len(allCombinations)))
         print("-" * 80)
-        print("Computer's gok: \n{}".format(printColorkeyString(latestTurnCombo)))
+        print("Computer's gok: \n{}\n{}".format(printColorkeyString(latestTurnCombo), latestTurnCombo))
         zwart, wit = generateFeedback(latestTurnCombo, colorkey)
         printFeedback(zwart, wit)
+        if zwart == 0 and wit == 0:
+            kleuren = kleurenInCombo(latestTurnCombo)
+            for kleur in kleuren:
+                for allItems in allCombinations:
+                    if kleur in allItems:
+                        allCombinations.remove(allItems)
         if zwart == 4:
             print("CPU heeft de code geraden.")
             break
