@@ -47,11 +47,11 @@ def createColorkey():
         elif color.lower() == "p" or color.lower() == "paars" or color.lower() == "purple":
             code.append("p")
         else:
-            print("Kleur kon niet gelezen worden. Probeer opnieuw")
-            code.clear()
-            break
+            print("Kleur kon niet gelezen worden. Herstart het programma en probeer opnieuw")
+            exit(401) #Ik moet hier restarten omdat hij anders de oude code ook blijft lezen. Dit crasht het programma.
     print("-" * 80)
     if len(code) != 4:
+        print(code)
         print("Failswitch: Code bestaat NIET uit 4 chars.")
         createColorkey()
     else:
@@ -161,11 +161,9 @@ def feedbackGameloop():
     print("-" * 80)
     for i in range(1, beurten+1):
         print("\n\n" + "-" * 80)
-        # print("-" * 80)
         print("Turn #{} (van {})".format(i, beurten))
         print("-" * 80)
         print("Computer's gok: \n{}".format(printColorkeyString(latestTurnCombo)))
-        # print(printColorkeyString(latestTurnCombo))
         zwart, wit = generateFeedback(latestTurnCombo, colorkey)
         printFeedback(zwart, wit)
         if zwart == 4:
@@ -176,18 +174,11 @@ def feedbackGameloop():
             if zwartCombo != zwart or witCombo != wit:
                 allCombinations.remove(j)
         latestTurnCombo = allCombinations[allCombinations.index(random.choice(allCombinations))]
-        # print("allcombo lengte: {}".format(len(allCombinations)))
         # input("hier input niet doen")
 
     print("De code was: {}".format(printColorkeyString(colorkey)))
 
 
-    # print(printColorkeyString(latestTurnCombo))
-    # generateFeedback(latestTurnCombo, colorkey)
 
 intro()
-# createColorkey(colorkey)
-# generateColorkey()
-# generateFeedback(["r", "g", "b", "r"])
-# print(printColorkeyString(colorkey))
-# print("Colorkey was {}".format(colorkey))
+
