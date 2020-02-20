@@ -195,13 +195,13 @@ def feedbackGameloop():
         if zwart == 0 and wit == 0:
             kleuren = kleurenInCombo(latestTurnCombo)
             for kleur in kleuren:
-                for aItems in allCombinations:    #1296
+                for aItems in reversed(allCombinations):    #1296
                     if kleur in aItems:
                         allCombinations.remove(aItems)
         if zwart == 4:
             print("CPU heeft de code geraden.")
             break
-        for j in allCombinations:
+        for j in reversed(allCombinations):
             zwartCombo, witCombo = generateFeedback(j, latestTurnCombo)
             if zwartCombo != zwart or witCombo != wit:
                 allCombinations.remove(j)
@@ -213,4 +213,3 @@ def feedbackGameloop():
 
 
 intro()
-
